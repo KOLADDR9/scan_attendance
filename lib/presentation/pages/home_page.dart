@@ -43,7 +43,7 @@ class HomePage extends StatelessWidget {
                                 shadows: [
                                   Shadow(color: Colors.black, blurRadius: 5)
                                 ])),
-                        Text('Officer_IT',
+                        Text('Officer_IT_Support',
                             style:
                                 TextStyle(fontSize: 18, color: Colors.white70)),
                       ],
