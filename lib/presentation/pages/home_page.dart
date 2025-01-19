@@ -3,14 +3,19 @@ import 'package:google_fonts/google_fonts.dart'; // Import the google_fonts pack
 import 'package:scan_attendance_app/presentation/pages/login.dart';
 import 'package:scan_attendance_app/presentation/pages/report_page.dart';
 import 'package:scan_attendance_app/presentation/pages/scan_page.dart';
-import 'package:scan_attendance_app/presentation/pages/members.dart'; // Import the MembersPage
 import 'package:scan_attendance_app/presentation/pages/schedule_page.dart';
 
 class HomePage extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
+      // Set the background color of the Scaffold to transparent
+      backgroundColor: Colors.transparent,
       body: Container(
+        // Make the Container fill the entire screen
+        width: double.infinity,
+        height: double.infinity,
+        // Set the gradient as the background of the Container
         decoration: BoxDecoration(
           gradient: LinearGradient(
             colors: [
@@ -69,7 +74,7 @@ class HomePage extends StatelessWidget {
                   borderRadius: BorderRadius.circular(20),
                   child: Container(
                     child: Image.asset(
-                      'assets/img/headoffice.webp', // Ensure this path is correct
+                      'assets/img/cdc.jpg', // Ensure this path is correct
                       width: 100,
                     ),
                   ),
@@ -79,13 +84,23 @@ class HomePage extends StatelessWidget {
                   'Head Office',
                   style: GoogleFonts.khmer(
                     // Use Khmer OS Moul from Google Fonts
-                    fontSize: 18,
+                    fontSize: 20,
                     color: Colors.white,
                     fontWeight: FontWeight.bold,
                   ),
                   textAlign: TextAlign.center,
                 ),
                 const SizedBox(height: 20),
+                Text(
+                  'Department',
+                  style: GoogleFonts.khmer(
+                    // Use Khmer OS Moul from Google Fonts
+                    fontSize: 18,
+                    color: Colors.white,
+                    fontWeight: FontWeight.bold,
+                  ),
+                  textAlign: TextAlign.center,
+                ),
 
                 // Grid of Options with Colorful Cards
                 GridView.builder(
@@ -167,11 +182,6 @@ class HomePage extends StatelessWidget {
             Navigator.push(
               context,
               MaterialPageRoute(builder: (context) => ScanPage()),
-            );
-          } else if (label == 'Members') {
-            Navigator.push(
-              context,
-              MaterialPageRoute(builder: (context) => MembersPage()),
             );
           } else if (label == 'Report') {
             Navigator.push(

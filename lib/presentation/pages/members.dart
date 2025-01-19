@@ -1,5 +1,5 @@
 import 'package:flutter/material.dart';
-import '../../core/services/supabase_service.dart';
+import '../../core/services/supabase_service1.dart';
 import '../../presentation/pages/home_page.dart';
 
 class MembersPage extends StatelessWidget {

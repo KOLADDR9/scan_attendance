@@ -1,170 +1,93 @@
 import 'package:flutter/material.dart';
-import 'package:scan_attendance_app/presentation/pages/home_page.dart';
+import 'package:scan_attendance_app/data/models/scan_record.dart';
+import 'package:scan_attendance_app/core/services/supabase_service.dart';
 
 class ReportPage extends StatefulWidget {
+  const ReportPage({super.key});
+
   @override
   _ReportPageState createState() => _ReportPageState();
 }
 
 class _ReportPageState extends State<ReportPage> {
-  final List<Map<String, String>> attendanceRecords = [
-    // January 2025
-    {'date': '2025-01-01', 'time': '09:00 AM', 'status': 'Present'},
-    {'date': '2025-01-02', 'time': '09:05 AM', 'status': 'Late'},
-    {'date': '2025-01-03', 'time': '09:02 AM', 'status': 'Present'},
-    {'date': '2025-01-04', 'time': '09:10 AM', 'status': 'Late'},
-    {'date': '2025-01-05', 'time': '09:00 AM', 'status': 'Present'},
+  final SupabaseService _supabaseService = SupabaseService();
+  List<ScanRecord> scanRecords = [];
+  List<ScanRecord> filteredRecords = [];
 
-    // February 2025
-    {'date': '2025-02-01', 'time': '09:00 AM', 'status': 'Present'},
-    {'date': '2025-02-02', 'time': '09:05 AM', 'status': 'Late'},
-    {'date': '2025-02-03', 'time': '09:02 AM', 'status': 'Present'},
-    {'date': '2025-02-04', 'time': '09:10 AM', 'status': 'Late'},
-    {'date': '2025-02-05', 'time': '09:00 AM', 'status': 'Present'},
+  DateTime? selectedDate; // Store the selected date
+  String? selectedStatus; // "Present", "Late", or null (All)
 
-    // March 2025
-    {'date': '2025-03-01', 'time': '09:00 AM', 'status': 'Present'},
-    {'date': '2025-03-02', 'time': '09:05 AM', 'status': 'Late'},
-    {'date': '2025-03-03', 'time': '09:02 AM', 'status': 'Present'},
-    {'date': '2025-03-04', 'time': '09:10 AM', 'status': 'Late'},
-    {'date': '2025-03-05', 'time': '09:00 AM', 'status': 'Present'},
-
-    // April 2025
-    {'date': '2025-04-01', 'time': '09:00 AM', 'status': 'Present'},
-    {'date': '2025-04-02', 'time': '09:05 AM', 'status': 'Late'},
-    {'date': '2025-04-03', 'time': '09:02 AM', 'status': 'Present'},
-    {'date': '2025-04-04', 'time': '09:10 AM', 'status': 'Late'},
-    {'date': '2025-04-05', 'time': '09:00 AM', 'status': 'Present'},
-
-    // May 2025
-    {'date': '2025-05-01', 'time': '09:00 AM', 'status': 'Present'},
-    {'date': '2025-05-02', 'time': '09:05 AM', 'status': 'Late'},
-    {'date': '2025-05-03', 'time': '09:02 AM', 'status': 'Present'},
-    {'date': '2025-05-04', 'time': '09:10 AM', 'status': 'Late'},
-    {'date': '2025-05-05', 'time': '09:00 AM', 'status': 'Present'},
-
-    // June 2025
-    {'date': '2025-06-01', 'time': '09:00 AM', 'status': 'Present'},
-    {'date': '2025-06-02', 'time': '09:05 AM', 'status': 'Late'},
-    {'date': '2025-06-03', 'time': '09:02 AM', 'status': 'Present'},
-    {'date': '2025-06-04', 'time': '09:10 AM', 'status': 'Late'},
-    {'date': '2025-06-05', 'time': '09:00 AM', 'status': 'Present'},
-
-    // July 2025
-    {'date': '2025-07-01', 'time': '09:00 AM', 'status': 'Present'},
-    {'date': '2025-07-02', 'time': '09:05 AM', 'status': 'Late'},
-    {'date': '2025-07-03', 'time': '09:02 AM', 'status': 'Present'},
-    {'date': '2025-07-04', 'time': '09:10 AM', 'status': 'Late'},
-    {'date': '2025-07-05', 'time': '09:00 AM', 'status': 'Present'},
-
-    // August 2025
-    {'date': '2025-08-01', 'time': '09:00 AM', 'status': 'Present'},
-    {'date': '2025-08-02', 'time': '09:05 AM', 'status': 'Late'},
-    {'date': '2025-08-03', 'time': '09:02 AM', 'status': 'Present'},
-    {'date': '2025-08-04', 'time': '09:10 AM', 'status': 'Late'},
-    {'date': '2025-08-05', 'time': '09:00 AM', 'status': 'Present'},
-
-    // September 2025
-    {'date': '2025-09-01', 'time': '09:00 AM', 'status': 'Present'},
-    {'date': '2025-09-02', 'time': '09:05 AM', 'status': 'Late'},
-    {'date': '2025-09-03', 'time': '09:02 AM', 'status': 'Present'},
-    {'date': '2025-09-04', 'time': '09:10 AM', 'status': 'Late'},
-    {'date': '2025-09-05', 'time': '09:00 AM', 'status': 'Present'},
-
-    // October 2025
-    {'date': '2025-10-01', 'time': '09:00 AM', 'status': 'Present'},
-    {'date': '2025-10-02', 'time': '09:05 AM', 'status': 'Late'},
-    {'date': '2025-10-03', 'time': '09:02 AM', 'status': 'Present'},
-    {'date': '2025-10-04', 'time': '09:10 AM', 'status': 'Late'},
-    {'date': '2025-10-05', 'time': '09:00 AM', 'status': 'Present'},
-
-    // November 2025
-    {'date': '2025-11-01', 'time': '09:00 AM', 'status': 'Present'},
-    {'date': '2025-11-02', 'time': '09:05 AM', 'status': 'Late'},
-    {'date': '2025-11-03', 'time': '09:02 AM', 'status': 'Present'},
-    {'date': '2025-11-04', 'time': '09:10 AM', 'status': 'Late'},
-    {'date': '2025-11-05', 'time': '09:00 AM', 'status': 'Present'},
-
-    // December 2025
-    {'date': '2025-12-01', 'time': '09:00 AM', 'status': 'Present'},
-    {'date': '2025-12-02', 'time': '09:05 AM', 'status': 'Late'},
-    {'date': '2025-12-03', 'time': '09:02 AM', 'status': 'Present'},
-    {'date': '2025-12-04', 'time': '09:10 AM', 'status': 'Late'},
-    {'date': '2025-12-05', 'time': '09:00 AM', 'status': 'Present'},
-  ];
-
-  String? selectedMonth;
-  String? selectedStatus; // "Present" or "Late"
-
-  final List<String> months = [
-    'All 2025', // Added "All" option
-    'January 2025',
-    'February 2025',
-    'March 2025',
-    'April 2025',
-    'May 2025',
-    'June 2025',
-    'July 2025',
-    'August 2025',
-    'September 2025',
-    'October 2025',
-    'November 2025',
-    'December 2025',
-  ];
-
-  List<Map<String, String>> get filteredRecords {
-    List<Map<String, String>> filtered = attendanceRecords;
-
-    // Filter by month (skip if 'All' is selected)
-    if (selectedMonth != null && selectedMonth!.split(' ')[0] != 'All') {
-      final monthNumber = _getMonthNumber(selectedMonth!);
-      filtered = filtered
-          .where((record) => record['date']!
-              .startsWith(selectedMonth!.split(' ')[1] + '-' + monthNumber))
-          .toList();
-    }
-
-    // Filter by status
-    if (selectedStatus != null) {
-      filtered = filtered
-          .where((record) => record['status'] == selectedStatus)
-          .toList();
-    }
-
-    return filtered;
+  @override
+  void initState() {
+    super.initState();
+    _fetchScanRecords();
   }
 
-  String _getMonthNumber(String month) {
-    switch (month.split(' ')[0]) {
-      case 'All':
-        return '01,02,03,04,05,06,07,08,09,10,11,12'; // Return all months
-      case 'January':
-        return '01';
-      case 'February':
-        return '02';
-      case 'March':
-        return '03';
-      case 'April':
-        return '04';
-      case 'May':
-        return '05';
-      case 'June':
-        return '06';
-      case 'July':
-        return '07';
-      case 'August':
-        return '08';
-      case 'September':
-        return '09';
-      case 'October':
-        return '10';
-      case 'November':
-        return '11';
-      case 'December':
-        return '12';
-      default:
-        return '01'; // Default to January if no match is found
+  // Fetch scan records from Supabase
+  Future<void> _fetchScanRecords() async {
+    final records = await _supabaseService.fetchScanRecords();
+    setState(() {
+      scanRecords = records.map((map) => ScanRecord.fromMap(map)).toList();
+      _sortRecordsByTimestamp(); // Sort records by timestamp
+      filteredRecords = scanRecords; // Initialize filtered records
+    });
+  }
+
+  // Sort records by timestamp in descending order (most recent first)
+  void _sortRecordsByTimestamp() {
+    scanRecords.sort((a, b) {
+      // Combine date and time into DateTime objects for comparison
+      final dateTimeA = DateTime(
+          a.date.year, a.date.month, a.date.day, a.time.hour, a.time.minute);
+      final dateTimeB = DateTime(
+          b.date.year, b.date.month, b.date.day, b.time.hour, b.time.minute);
+      return dateTimeB.compareTo(dateTimeA); // Descending order
+    });
+  }
+
+  // Function to show the date picker
+  Future<void> _selectDate(BuildContext context) async {
+    final DateTime? picked = await showDatePicker(
+      context: context,
+      initialDate: DateTime.now(), // Initial date (today)
+      firstDate: DateTime(2000), // Earliest selectable date
+      lastDate: DateTime(2100), // Latest selectable date
+    );
+
+    if (picked != null) {
+      setState(() {
+        selectedDate = picked; // Store the selected date
+        _filterRecords(); // Apply filters after selecting date
+      });
+
+      ScaffoldMessenger.of(context).showSnackBar(
+        SnackBar(content: Text('Selected Date: ${picked.toLocal()}')),
+      );
     }
+  }
+
+  // Filter records based on selected date and status
+  void _filterRecords() {
+    setState(() {
+      filteredRecords = scanRecords.where((record) {
+        // Filter by date
+        if (selectedDate != null) {
+          // Compare year, month, and day directly
+          if (record.date.year != selectedDate!.year ||
+              record.date.month != selectedDate!.month ||
+              record.date.day != selectedDate!.day) {
+            return false;
+          }
+        }
+
+        // Filter by status
+        if (selectedStatus != null && record.status != selectedStatus) {
+          return false;
+        }
+
+        return true;
+      }).toList();
+    });
   }
 
   @override
@@ -180,10 +103,7 @@ class _ReportPageState extends State<ReportPage> {
         leading: IconButton(
           icon: const Icon(Icons.arrow_back, color: Colors.white),
           onPressed: () {
-            Navigator.pushReplacement(
-              context,
-              MaterialPageRoute(builder: (context) => HomePage()),
-            );
+            Navigator.pop(context);
           },
         ),
       ),
@@ -201,70 +121,96 @@ class _ReportPageState extends State<ReportPage> {
         ),
         child: Column(
           children: [
-            // Month Filter Dropdown and Status Buttons
+            // Date Picker and Status Buttons (Horizontal Scrollable)
             Padding(
               padding: EdgeInsets.symmetric(
                 horizontal: screenWidth * 0.05, // 5% of screen width
                 vertical: screenHeight * 0.02, // 2% of screen height
               ),
-              child: Row(
-                children: [
-                  // Month Dropdown
-                  Expanded(
-                    child: DropdownButton<String>(
-                      value: selectedMonth,
-                      hint: const Text('Select Month',
-                          style: TextStyle(color: Colors.white)),
-                      dropdownColor: const Color.fromRGBO(16, 51, 50, 1),
-                      style: const TextStyle(color: Colors.white),
-                      onChanged: (String? newValue) {
-                        setState(() {
-                          selectedMonth = newValue;
-                        });
-                      },
-                      items:
-                          months.map<DropdownMenuItem<String>>((String value) {
-                        return DropdownMenuItem<String>(
-                          value: value,
-                          child: Text(value,
-                              style: const TextStyle(color: Colors.white)),
-                        );
-                      }).toList(),
-                    ),
+              child: Scrollbar(
+                child: SingleChildScrollView(
+                  scrollDirection:
+                      Axis.horizontal, // Enable horizontal scrolling
+                  child: Row(
+                    children: [
+                      // Date Picker Button
+                      ElevatedButton(
+                        onPressed: () {
+                          _selectDate(context); // Call the date picker method
+                        },
+                        style: ElevatedButton.styleFrom(
+                          backgroundColor:
+                              const Color.fromARGB(255, 99, 99, 99),
+                        ),
+                        child: const Text(
+                          'Select Date',
+                          style: TextStyle(color: Colors.white),
+                        ),
+                      ),
+                      const SizedBox(width: 10),
+                      // All Button
+                      ElevatedButton(
+                        onPressed: () {
+                          setState(() {
+                            selectedStatus = null; // Reset status filter
+                            _filterRecords(); // Apply filters
+                          });
+                        },
+                        style: ElevatedButton.styleFrom(
+                          backgroundColor: selectedStatus == null
+                              ? Colors.blue // Highlight when selected
+                              : const Color.fromARGB(255, 99, 99, 99),
+                        ),
+                        child: const Text('All',
+                            style: TextStyle(color: Colors.white)),
+                      ),
+                      const SizedBox(width: 10),
+                      // Present Button
+                      ElevatedButton(
+                        onPressed: () {
+                          setState(() {
+                            // Reset selectedStatus if it's already "Present"
+                            if (selectedStatus == 'Present') {
+                              selectedStatus = null; // Clear the filter
+                            } else {
+                              selectedStatus = 'Present'; // Set to "Present"
+                            }
+                            _filterRecords(); // Apply filters
+                          });
+                        },
+                        style: ElevatedButton.styleFrom(
+                          backgroundColor: selectedStatus == 'Present'
+                              ? Colors.green
+                              : const Color.fromARGB(255, 99, 99, 99),
+                        ),
+                        child: const Text('Present',
+                            style: TextStyle(color: Colors.white)),
+                      ),
+                      const SizedBox(width: 10),
+                      // Late Button
+                      ElevatedButton(
+                        onPressed: () {
+                          setState(() {
+                            // Reset selectedStatus if it's already "Late"
+                            if (selectedStatus == 'Late') {
+                              selectedStatus = null; // Clear the filter
+                            } else {
+                              selectedStatus = 'Late'; // Set to "Late"
+                            }
+                            _filterRecords(); // Apply filters
+                          });
+                        },
+                        style: ElevatedButton.styleFrom(
+                          backgroundColor: selectedStatus == 'Late'
+                              ? Colors.orange
+                              : const Color.fromARGB(255, 99, 99, 99),
+                        ),
+                        child: const Text('Late',
+                            style: TextStyle(color: Colors.white)),
+                      ),
+                    ],
                   ),
-                  const SizedBox(width: 10),
-                  // Present Button
-                  ElevatedButton(
-                    onPressed: () {
-                      setState(() {
-                        selectedStatus = 'Present';
-                      });
-                    },
-                    style: ElevatedButton.styleFrom(
-                      backgroundColor: selectedStatus == 'Present'
-                          ? Colors.green
-                          : const Color.fromARGB(255, 99, 99, 99),
-                    ),
-                    child: const Text('Present',
-                        style: TextStyle(color: Colors.white)),
-                  ),
-                  const SizedBox(width: 10),
-                  // Late Button
-                  ElevatedButton(
-                    onPressed: () {
-                      setState(() {
-                        selectedStatus = 'Late';
-                      });
-                    },
-                    style: ElevatedButton.styleFrom(
-                      backgroundColor: selectedStatus == 'Late'
-                          ? Colors.orange
-                          : const Color.fromARGB(255, 99, 99, 99),
-                    ),
-                    child: const Text('Late',
-                        style: TextStyle(color: Colors.white)),
-                  ),
-                ],
+                ),
               ),
             ),
             // Attendance Records List
@@ -273,67 +219,76 @@ class _ReportPageState extends State<ReportPage> {
                 itemCount: filteredRecords.length,
                 itemBuilder: (context, index) {
                   final record = filteredRecords[index];
-                  return Card(
-                    margin: EdgeInsets.symmetric(
-                      horizontal: screenWidth * 0.05, // 5% of screen width
-                      vertical: screenHeight * 0.01, // 1% of screen height
-                    ),
-                    elevation: 4.0,
-                    shape: RoundedRectangleBorder(
-                      borderRadius: BorderRadius.circular(10.0),
-                    ),
-                    child: ListTile(
-                      leading: Container(
-                        padding: const EdgeInsets.all(8.0),
-                        decoration: BoxDecoration(
-                          color: record['status'] == 'Present'
-                              ? Colors.green.withOpacity(0.2)
-                              : Colors.orange.withOpacity(0.2),
-                          shape: BoxShape.circle,
-                        ),
-                        child: Icon(
-                          record['status'] == 'Present'
-                              ? Icons.check_circle
-                              : Icons.warning,
-                          color: record['status'] == 'Present'
-                              ? Colors.green
-                              : Colors.orange,
-                        ),
+                  return InkWell(
+                    onTap: () {
+                      // Handle the tap event
+                      print('Tapped on record: ${record.date}');
+                    },
+                    child: Card(
+                      margin: EdgeInsets.symmetric(
+                        horizontal: screenWidth * 0.05, // 5% of screen width
+                        vertical: screenHeight * 0.01, // 1% of screen height
                       ),
-                      title: Text(
-                        'Date: ${record['date']}',
-                        style: TextStyle(
-                          fontWeight: FontWeight.bold,
-                          fontSize: screenWidth * 0.04, // 4% of screen width
-                        ),
+                      elevation: 4.0,
+                      shape: RoundedRectangleBorder(
+                        borderRadius: BorderRadius.circular(10.0),
                       ),
-                      subtitle: Text(
-                        'Time: ${record['time']}',
-                        style: TextStyle(
-                          fontSize: screenWidth * 0.035, // 3.5% of screen width
-                          color: const Color.fromARGB(179, 14, 14, 14),
-                        ),
-                      ),
-                      trailing: Container(
-                        padding: EdgeInsets.symmetric(
-                          horizontal: screenWidth * 0.03, // 3% of screen width
-                          vertical: screenHeight * 0.01, // 1% of screen height
-                        ),
-                        decoration: BoxDecoration(
-                          color: record['status'] == 'Present'
-                              ? Colors.green.withOpacity(0.2)
-                              : Colors.orange.withOpacity(0.2),
-                          borderRadius: BorderRadius.circular(20.0),
-                        ),
-                        child: Text(
-                          record['status']!,
-                          style: TextStyle(
-                            color: record['status'] == 'Present'
+                      child: ListTile(
+                        leading: Container(
+                          padding: const EdgeInsets.all(8.0),
+                          decoration: BoxDecoration(
+                            color: record.status == 'Present'
+                                ? Colors.green.withOpacity(0.2)
+                                : Colors.orange.withOpacity(0.2),
+                            shape: BoxShape.circle,
+                          ),
+                          child: Icon(
+                            record.status == 'Present'
+                                ? Icons.check_circle
+                                : Icons.warning,
+                            color: record.status == 'Present'
                                 ? Colors.green
                                 : Colors.orange,
+                          ),
+                        ),
+                        title: Text(
+                          'Date: ${record.date}',
+                          style: TextStyle(
                             fontWeight: FontWeight.bold,
+                            fontSize: screenWidth * 0.04, // 4% of screen width
+                          ),
+                        ),
+                        subtitle: Text(
+                          'Time: ${record.time}, Status: ${record.status}',
+                          style: TextStyle(
                             fontSize:
                                 screenWidth * 0.035, // 3.5% of screen width
+                            color: const Color.fromARGB(179, 14, 14, 14),
+                          ),
+                        ),
+                        trailing: Container(
+                          padding: EdgeInsets.symmetric(
+                            horizontal:
+                                screenWidth * 0.03, // 3% of screen width
+                            vertical:
+                                screenHeight * 0.01, // 1% of screen height
+                          ),
+                          decoration: BoxDecoration(
+                            color: record.status == 'Present'
+                                ? Colors.green.withOpacity(0.2)
+                                : Colors.orange.withOpacity(0.2),
+                            borderRadius: BorderRadius.circular(20.0),
+                          ),
+                          child: Text(
+                            record.status,
+                            style: TextStyle(
+                              color: record.status == 'Present'
+                                  ? Colors.green
+                                  : Colors.orange,
+                              fontWeight: FontWeight.bold,
+                              fontSize:
+                                  screenWidth * 0.035, // 3.5% of screen width
+                            ),
                           ),
                         ),
                       ),
