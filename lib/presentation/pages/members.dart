@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import '../../core/services/supabase_service.dart';
+import '../../presentation/pages/home_page.dart';
 
 class MembersPage extends StatelessWidget {
   final SupabaseService supabaseService = SupabaseService();
@@ -12,8 +13,16 @@ class MembersPage extends StatelessWidget {
       appBar: AppBar(
         title: const Text('Members',
             style: TextStyle(fontWeight: FontWeight.bold, color: Colors.white)),
-        backgroundColor:
-            Color.fromRGBO(16, 51, 50, 1), // AppBar color remains the same
+        backgroundColor: const Color.fromRGBO(16, 51, 50, 1),
+        leading: IconButton(
+          icon: const Icon(Icons.arrow_back, color: Colors.white),
+          onPressed: () {
+            Navigator.pushReplacement(
+              context,
+              MaterialPageRoute(builder: (context) => HomePage()),
+            );
+          },
+        ),
       ),
       body: Container(
         decoration: BoxDecoration(
