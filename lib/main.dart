@@ -12,12 +12,12 @@ void main() async {
 
   // Initialize Supabase
   await Supabase.initialize(
-    url: 'https://hcnjtkntvkkxfzkgjqaw.supabase.co',
+    url: 'https://szwkwilphpddqotouvva.supabase.co',
     anonKey:
-        'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6Imhjbmp0a250dmtreGZ6a2dqcWF3Iiwicm9sZSI6ImFub24iLCJpYXQiOjE3MzYxNDY0MTIsImV4cCI6MjA1MTcyMjQxMn0.YY7TswIgHhPbTJYjdQw2yc7JNEpmL4aa-XN-w013BRw',
+        'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6InN6d2t3aWxwaHBkZHFvdG91dnZhIiwicm9sZSI6ImFub24iLCJpYXQiOjE3MzcyODExNjUsImV4cCI6MjA1Mjg1NzE2NX0.ijtmCC2suV46mrUx-JqdUecqXzUsQL8B--PFknqP-Ao',
   );
 
-  runApp(MyApp());
+  runApp(const MyApp());
 }
 
 class MyApp extends StatelessWidget {
@@ -32,11 +32,13 @@ class MyApp extends StatelessWidget {
       ),
       initialRoute: '/welcome', // Set the initial route to WelcomeScreen
       routes: {
-        '/welcome': (context) => WelcomeScreen(), // Define the /welcome route
-        //'/sign_up': (context) => SignUpPage(), // Define the /home route
+        '/welcome': (context) =>
+            const WelcomeScreen(), // Define the /welcome route
+        '/sign_up': (context) => SignUpPage(), // Define the /sign_up route
+        '/login': (context) => LoginPage(), // Define the /login route
         '/home': (context) => HomePage(), // Define the /home route
-        '/scan': (context) => ScanPage(), // Define the scan route
-        '/member': (context) => MembersPage(),
+        '/scan': (context) => ScanPage(), // Define the /scan route
+        '/member': (context) => MembersPage(), // Define the /member route
       },
     );
   }

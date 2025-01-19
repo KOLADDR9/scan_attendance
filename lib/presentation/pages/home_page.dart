@@ -1,13 +1,21 @@
 import 'package:flutter/material.dart';
 import 'package:google_fonts/google_fonts.dart'; // Import the google_fonts package
+import 'package:scan_attendance_app/presentation/pages/login.dart';
+import 'package:scan_attendance_app/presentation/pages/report_page.dart';
 import 'package:scan_attendance_app/presentation/pages/scan_page.dart';
-import 'package:scan_attendance_app/presentation/pages/members.dart'; // Import the MembersPage
+import 'package:scan_attendance_app/presentation/pages/schedule_page.dart';
 
 class HomePage extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
+      // Set the background color of the Scaffold to transparent
+      backgroundColor: Colors.transparent,
       body: Container(
+        // Make the Container fill the entire screen
+        width: double.infinity,
+        height: double.infinity,
+        // Set the gradient as the background of the Container
         decoration: BoxDecoration(
           gradient: LinearGradient(
             colors: [
@@ -19,75 +27,87 @@ class HomePage extends StatelessWidget {
             end: Alignment.bottomRight,
           ),
         ),
-        child: Padding(
-          padding: const EdgeInsets.symmetric(
-              horizontal: 16.0), // Removed vertical padding
-          child: Column(
-            crossAxisAlignment: CrossAxisAlignment.stretch,
-            children: [
-              // Profile Section with Shadow
-              Padding(
-                padding:
-                    const EdgeInsets.only(top: 40.0), // Add top padding only
-                child: Row(
-                  mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                  children: [
-                    Column(
-                      crossAxisAlignment: CrossAxisAlignment.start,
-                      children: const [
-                        Text('Kola',
-                            style: TextStyle(
-                                fontSize: 26,
-                                fontWeight: FontWeight.bold,
-                                color: Colors.white,
-                                shadows: [
-                                  Shadow(color: Colors.black, blurRadius: 5)
-                                ])),
-                        Text('Officer_IT_Support',
-                            style:
-                                TextStyle(fontSize: 18, color: Colors.white70)),
-                      ],
-                    ),
-                    const CircleAvatar(
-                      radius: 30,
-                      backgroundColor: Colors.white,
-                      backgroundImage: AssetImage(
-                          'assets/img/profile.webp'), // Use AssetImage for local images
-                    ),
-                  ],
-                ),
-              ),
-              const SizedBox(height: 20),
-
-              // Main Image with Border
-              ClipRRect(
-                borderRadius: BorderRadius.circular(20),
-                child: Container(
-                  decoration: BoxDecoration(
-                    border: Border.all(color: Colors.white, width: 2),
-                  ),
-                  child: Image.asset(
-                    'assets/img/cdc.jpg', // Ensure this path is correct
-                    width: 200,
+        child: SingleChildScrollView(
+          // Wrap the Column with SingleChildScrollView
+          child: Padding(
+            padding: const EdgeInsets.symmetric(
+                horizontal: 16.0), // Removed vertical padding
+            child: Column(
+              crossAxisAlignment: CrossAxisAlignment.stretch,
+              children: [
+                // Profile Section with Shadow
+                Padding(
+                  padding:
+                      const EdgeInsets.only(top: 40.0), // Add top padding only
+                  child: Row(
+                    mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                    children: [
+                      Column(
+                        crossAxisAlignment: CrossAxisAlignment.start,
+                        children: const [
+                          Text('Kola',
+                              style: TextStyle(
+                                  fontSize: 26,
+                                  fontWeight: FontWeight.bold,
+                                  color: Colors.white,
+                                  shadows: [
+                                    Shadow(color: Colors.black, blurRadius: 5)
+                                  ])),
+                          Text('Officer_IT_Support',
+                              style: TextStyle(
+                                  fontSize: 18, color: Colors.white70)),
+                        ],
+                      ),
+                      const CircleAvatar(
+                        radius: 30,
+                        backgroundColor: Colors.white,
+                        backgroundImage: AssetImage(
+                            'assets/img/profile.webp'), // Use AssetImage for local images
+                      ),
+                    ],
                   ),
                 ),
-              ),
-              const SizedBox(height: 20),
-              Text(
-                'ក្រុមប្រឹក្សាអភិវឌ្ឍន៏កម្ពុជា',
-                style: GoogleFonts.khmer(
-                  // Use Khmer OS Moul from Google Fonts
-                  fontSize: 18,
-                  color: Colors.white,
-                  fontWeight: FontWeight.bold,
-                ),
-                textAlign: TextAlign.center,
-              ),
-              const SizedBox(height: 20),
+                const SizedBox(height: 20),
 
-              // Grid of Options with Colorful Cards
-              Expanded(
-                child: GridView.builder(
+                // Main Image with Border
+                ClipRRect(
+                  borderRadius: BorderRadius.circular(20),
+                  child: Container(
+                    child: Image.asset(
+                      'assets/img/cdc.jpg', // Ensure this path is correct
+                      width: 100,
+                    ),
+                  ),
+                ),
+                const SizedBox(height: 20),
+                Text(
+                  'Head Office',
+                  style: GoogleFonts.khmer(
+                    // Use Khmer OS Moul from Google Fonts
+                    fontSize: 20,
+                    color: Colors.white,
+                    fontWeight: FontWeight.bold,
+                  ),
+                  textAlign: TextAlign.center,
+                ),
+                const SizedBox(height: 20),
+                Text(
+                  'Department',
+                  style: GoogleFonts.khmer(
+                    // Use Khmer OS Moul from Google Fonts
+                    fontSize: 18,
+                    color: Colors.white,
+                    fontWeight: FontWeight.bold,
+                  ),
+                  textAlign: TextAlign.center,
+                ),
+
+                // Grid of Options with Colorful Cards
+                GridView.builder(
+                  shrinkWrap:
+                      true, // Add this to make GridView scrollable inside Column
+                  physics:
+                      NeverScrollableScrollPhysics(), // Disable GridView's internal scrolling
                   gridDelegate: SliverGridDelegateWithFixedCrossAxisCount(
                     crossAxisCount: 3, // 3 boxes per row
                     crossAxisSpacing: 10.0, // Spacing between columns
@@ -101,19 +121,30 @@ class HomePage extends StatelessWidget {
                       {'icon': Icons.qr_code, 'label': 'Scan'},
                       {'icon': Icons.group, 'label': 'Members'},
                       {'icon': Icons.bar_chart, 'label': 'Report'},
-                      {'icon': Icons.history, 'label': 'Record'},
-                      {'icon': Icons.time_to_leave, 'label': 'Leave'},
+                      {'icon': Icons.person, 'label': 'Me'},
+                      {'icon': Icons.exit_to_app, 'label': 'Leave'},
                       {'icon': Icons.schedule, 'label': 'Schedule'},
                     ];
+                    // Define a list of colors for the icons
+                    final List<Color> iconColors = [
+                      Colors.green, // Color for the first icon
+                      Colors.blue, // Color for the second icon
+                      Colors.orange, // Color for the third icon
+                      Colors.purple, // Color for the fourth icon
+                      Colors.red, // Color for the fifth icon
+                      Colors.teal, // Color for the sixth icon
+                    ];
                     return _buildOptionCard(
-                        context,
-                        options[index]['icon'] as IconData?,
-                        options[index]['label'] as String?,
-                        index); // Pass the index to assign different colors
+                      context,
+                      options[index]['icon'] as IconData?,
+                      options[index]['label'] as String?,
+                      index,
+                      iconColors[index], // Pass the icon color
+                    );
                   },
                 ),
-              ),
-            ],
+              ],
+            ),
           ),
         ),
       ),
@@ -121,15 +152,20 @@ class HomePage extends StatelessWidget {
   }
 
   Widget _buildOptionCard(
-      BuildContext context, IconData? icon, String? label, int index) {
+    BuildContext context,
+    IconData? icon,
+    String? label,
+    int index,
+    Color iconColor, // Add iconColor parameter
+  ) {
     // Define a list of colors for the grid items
     final List<Color> cardColors = [
-      const Color.fromARGB(72, 113, 0, 169),
-      const Color.fromARGB(255, 0, 147, 76),
-      const Color.fromARGB(255, 144, 82, 0),
-      const Color.fromARGB(255, 0, 63, 99),
-      const Color.fromARGB(255, 164, 0, 0),
-      const Color.fromARGB(255, 0, 81, 62),
+      const Color.fromARGB(40, 255, 255, 255),
+      const Color.fromARGB(40, 255, 255, 255),
+      const Color.fromARGB(40, 255, 255, 255),
+      const Color.fromARGB(40, 255, 255, 255),
+      const Color.fromARGB(40, 255, 255, 255),
+      const Color.fromARGB(40, 255, 255, 255),
     ];
 
     return Card(
@@ -142,17 +178,25 @@ class HomePage extends StatelessWidget {
       child: InkWell(
         borderRadius: BorderRadius.circular(20),
         onTap: () {
-          if (label == 'Scan Attendance') {
+          if (label == 'Scan') {
             Navigator.push(
               context,
               MaterialPageRoute(builder: (context) => ScanPage()),
             );
-          } else if (label == 'Members') {
+          } else if (label == 'Report') {
             Navigator.push(
               context,
-              MaterialPageRoute(
-                  builder: (context) =>
-                      MembersPage()), // Navigate to MembersPage
+              MaterialPageRoute(builder: (context) => ReportPage()),
+            );
+          } else if (label == 'Leave') {
+            Navigator.push(
+              context,
+              MaterialPageRoute(builder: (context) => LoginPage()),
+            );
+          } else if (label == 'Schedule') {
+            Navigator.push(
+              context,
+              MaterialPageRoute(builder: (context) => SchedulePage()),
             );
           }
         },
@@ -161,9 +205,11 @@ class HomePage extends StatelessWidget {
             mainAxisAlignment: MainAxisAlignment.center,
             crossAxisAlignment: CrossAxisAlignment.center,
             children: [
-              Icon(icon,
-                  size: 30, // Further reduced icon size
-                  color: Colors.white), // White icon for contrast
+              Icon(
+                icon,
+                size: 30, // Further reduced icon size
+                color: iconColor, // Use the passed icon color
+              ),
               const SizedBox(height: 6), // Further reduced spacing
               Text(
                 label ?? '',

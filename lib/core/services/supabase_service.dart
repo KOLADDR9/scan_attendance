@@ -1,33 +1,29 @@
 import 'package:supabase_flutter/supabase_flutter.dart';
 
 class SupabaseService {
-  final SupabaseClient supabase = Supabase.instance.client;
+  static final SupabaseService _instance = SupabaseService._internal();
+  factory SupabaseService() => _instance;
+  SupabaseService._internal();
 
-  // Save attendance record
-  Future<void> saveAttendance(String userId, DateTime timestamp) async {
-    await supabase.from('attendance').insert({
-      'user_id': userId,
-      'timestamp': timestamp.toIso8601String(),
+  final SupabaseClient _client = Supabase.instance.client;
+
+  // Insert a scan record
+  Future<void> insertScanRecord(
+      String scannedData, DateTime scanTime, String status) async {
+    await _client.from('scan_records').insert({
+      'scanned_data': scannedData,
+      'date': scanTime.toIso8601String().split('T')[0], // Extract date
+      'time': scanTime
+          .toIso8601String()
+          .split('T')[1]
+          .split('.')[0], // Extract time
+      'status': status,
     });
   }
 
-  // Fetch attendance records
-  Future<List<Map<String, dynamic>>> fetchAttendance() async {
-    final response = await supabase
-        .from('attendance')
-        .select('*, users(name, email)')
-        .order('timestamp', ascending: false);
-    return List<Map<String, dynamic>>.from(response);
-  }
-
-  // Fetch all members from the users table
-  Future<List<Map<String, dynamic>>> fetchMembers() async {
-    try {
-      final response = await supabase.from('users').select('*');
-      return List<Map<String, dynamic>>.from(response);
-    } catch (e) {
-      print('Error fetching members: $e');
-      throw e; // Rethrow the error to handle it in the UI
-    }
+  // Fetch all scan records
+  Future<List<Map<String, dynamic>>> fetchScanRecords() async {
+    final response = await _client.from('scan_records').select('*');
+    return response as List<Map<String, dynamic>>;
   }
 }
