@@ -24,6 +24,6 @@ class SupabaseService {
   // Fetch all scan records
   Future<List<Map<String, dynamic>>> fetchScanRecords() async {
     final response = await _client.from('scan_records').select('*');
-    return response as List<Map<String, dynamic>>;
+    return response;
   }
 }
