@@ -12,7 +12,7 @@ class AppRoutes {
       case home:
         return MaterialPageRoute(builder: (_) => HomePage());
       case scan:
-        return MaterialPageRoute(builder: (_) => ScanPage());
+        return MaterialPageRoute(builder: (_) => const ScanPage());
       default:
         return MaterialPageRoute(
             builder: (_) =>

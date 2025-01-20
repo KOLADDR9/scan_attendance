@@ -1,3 +1,5 @@
+// For platform-specific checks
+import 'package:flutter/foundation.dart' show kIsWeb; // For web detection
 import 'package:flutter/material.dart';
 import 'package:location/location.dart';
 
@@ -19,8 +21,24 @@ class _WelcomeScreenState extends State<WelcomeScreen> {
     _requestLocationPermission();
   }
 
-  // Function to request location permission
+  // Function to request location permission with web fallback
   Future<void> _requestLocationPermission() async {
+    // Check for web and skip permission requests
+    if (kIsWeb) {
+      print('Running on Web: Skipping location permission check.');
+      setState(() {
+        _isLoading = false;
+        _permissionDenied = false; // Assume permissions are granted on web
+      });
+
+      // Simulate a delay before navigation
+      await Future.delayed(const Duration(seconds: 2));
+      print('Navigating to Home Page...');
+      Navigator.pushReplacementNamed(context, '/home');
+      return;
+    }
+
+    // For non-web platforms (mobile and desktop)
     bool serviceEnabled;
     PermissionStatus permissionGranted;
 
@@ -29,7 +47,6 @@ class _WelcomeScreenState extends State<WelcomeScreen> {
     if (!serviceEnabled) {
       serviceEnabled = await location.requestService();
       if (!serviceEnabled) {
-        // Location service is not enabled, show a message or handle it
         print('Location service is not enabled.');
         setState(() {
           _isLoading = false;
@@ -44,7 +61,6 @@ class _WelcomeScreenState extends State<WelcomeScreen> {
     if (permissionGranted == PermissionStatus.denied) {
       permissionGranted = await location.requestPermission();
       if (permissionGranted != PermissionStatus.granted) {
-        // Location permission is not granted, show a message or handle it
         print('Location permission is not granted.');
         setState(() {
           _isLoading = false;
@@ -56,15 +72,14 @@ class _WelcomeScreenState extends State<WelcomeScreen> {
 
     // Location permission is granted
     setState(() {
-      _isLoading = true; // Keep loading animation running
+      _isLoading = false;
       _permissionDenied = false;
     });
 
-    // Show WelcomeScreen for 5 seconds, then navigate to the home page
-    print('Showing WelcomeScreen for 5 seconds...');
-    await Future.delayed(const Duration(seconds: 2)); // Wait for 5 seconds
-    print('Navigating to SignUpPage...');
-    Navigator.pushReplacementNamed(context, '/home'); // Navigate to home page
+    // Simulate a delay before navigation
+    print('Navigating to Home Page...');
+    await Future.delayed(const Duration(seconds: 2));
+    Navigator.pushReplacementNamed(context, '/home');
   }
 
   @override

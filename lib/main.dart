@@ -35,9 +35,9 @@ class MyApp extends StatelessWidget {
         '/welcome': (context) =>
             const WelcomeScreen(), // Define the /welcome route
         '/sign_up': (context) => SignUpPage(), // Define the /sign_up route
-        '/login': (context) => LoginPage(), // Define the /login route
+        '/login': (context) => const LoginPage(), // Define the /login route
         '/home': (context) => HomePage(), // Define the /home route
-        '/scan': (context) => ScanPage(), // Define the /scan route
+        '/scan': (context) => const ScanPage(), // Define the /scan route
         '/member': (context) => MembersPage(), // Define the /member route
       },
     );
